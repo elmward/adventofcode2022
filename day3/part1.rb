@@ -1,12 +1,7 @@
 # frozen_string_literal: true
-
-def priorities
-  @priorities ||= {}
-  if @priorities.empty?
-    ('a'..'z').to_a.map.with_index { |c, i| @priorities[c] = i + 1 }
-    ('A'..'Z').to_a.map.with_index { |c, i| @priorities[c] = i + 27 }
-  end
-  @priorities
+ALL_ITEMS = [].concat(('a'..'z').to_a).concat(('A'..'Z').to_a)
+PRIORITIES = ALL_ITEMS.each.with_index.each_with_object({}) do |(c, i), priorities|
+  priorities[c] = i + 1
 end
 
 def main
@@ -14,7 +9,7 @@ def main
     first = line.chars[0..(line.chars.count / 2) - 1]
     second = line.chars[(line.chars.count / 2)..]
     repeat = second.detect { |c| first.include?(c) }
-    acc + priorities[repeat]
+    acc + PRIORITIES[repeat]
   end)
 end
 
