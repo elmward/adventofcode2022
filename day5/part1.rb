@@ -17,7 +17,7 @@ def main
   initial_state, directions = input.split("\n\n")
   stacks = load_stacks(initial_state)
   stacks = follow_directions(stacks, directions)
-  puts stacks.map { |stack| stack.last }.join
+  puts stacks.map(&:last).join
 end
 
 def load_stacks(initial_state)
