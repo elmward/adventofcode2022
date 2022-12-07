@@ -35,18 +35,13 @@ ROOT = Node.new(DIR, '/', nil)
 def main
   pwd = ROOT
   File.readlines('./input.txt').map(&:strip).each do |line|
-    if line.start_with?('$')
-      cmd = line.split[1]
-      if cmd == 'cd'
-        pwd = cd(pwd, line.split[2])
-      end
+    if line.start_with?('$') && line.split[1] == 'cd'
+      pwd = cd(pwd, line.split[2])
     else # ls output
       size, name = line.split
-      if size == DIR.downcase
-        pwd.children << Node.new(DIR, name, pwd)
-      else
-        pwd.children << Node.new(FILE, name, pwd, size.to_i)
-      end
+      size = size.to_i
+      type = size.zero? ? DIR : FILE
+      pwd.children << Node.new(type, name, pwd, size)
     end
   end
   puts gather_small_dirs(ROOT).sum(&:size)
