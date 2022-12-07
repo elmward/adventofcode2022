@@ -30,28 +30,15 @@ class Node
   end
 end
 
+ROOT = Node.new(DIR, '/', nil)
+
 def main
-  root = Node.new(DIR, '/', nil)
-  pwd = root
-  commands = File.readlines('./input.txt').map(&:strip).each do |line|
+  pwd = ROOT
+  File.readlines('./input.txt').map(&:strip).each do |line|
     if line.start_with?('$')
       cmd = line.split[1]
       if cmd == 'cd'
-        name = line.split[2]
-        if name == '..'
-          pwd = pwd.parent
-        elsif name == '/'
-          pwd = root
-        else
-          subdir = pwd.children.detect { |child| child.name == name }
-          if subdir.nil?
-            new_dir = Node.new(DIR, name, pwd)
-            pwd.children << new_dir
-            pwd = new_dir
-          else
-            pwd = subdir
-          end
-        end
+        pwd = cd(pwd, line.split[2])
       end
     else # ls output
       size, name = line.split
@@ -62,7 +49,26 @@ def main
       end
     end
   end
-  puts gather_small_dirs(root).sum(&:size)
+  puts gather_small_dirs(ROOT).sum(&:size)
+end
+
+def cd(pwd, name)
+  case name
+  when '..'
+    pwd = pwd.parent
+  when '/'
+    pwd = ROOT
+  else
+    subdir = pwd.children.detect { |child| child.name == name }
+    if subdir.nil?
+      new_dir = Node.new(DIR, name, pwd)
+      pwd.children << new_dir
+      pwd = new_dir
+    else
+      pwd = subdir
+    end
+  end
+  pwd
 end
 
 def gather_small_dirs(node)
