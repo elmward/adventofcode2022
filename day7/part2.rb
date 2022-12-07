@@ -19,7 +19,7 @@ class Node
     if type == FILE
       @size
     else
-      children.map { |c| c.size }.sum
+      children.sum(&:size)
     end
   end
 
@@ -72,9 +72,7 @@ end
 
 def gather_big_dirs(node, needed_space)
   big_dirs = []
-  if node.type == DIR && node.size >= needed_space
-    big_dirs << node
-  end
+  big_dirs << node if node.type == DIR && node.size >= needed_space
   big_dirs.concat(node.children.map { |n| gather_big_dirs(n, needed_space) }).flatten
 end
 

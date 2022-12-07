@@ -17,7 +17,7 @@ class Node
     if type == FILE
       @size
     else
-      children.map { |c| c.size }.sum
+      children.sum(&:size)
     end
   end
 
@@ -33,12 +33,11 @@ end
 def main
   root = Node.new(DIR, '/', nil)
   pwd = root
-  commands = File.readlines('./input.txt').map(&:strip)
-  commands.each do |command|
-    if command.start_with?('$')
-      cmd = command.split[1]
+  commands = File.readlines('./input.txt').map(&:strip).each do |line|
+    if line.start_with?('$')
+      cmd = line.split[1]
       if cmd == 'cd'
-        name = command.split[2]
+        name = line.split[2]
         if name == '..'
           pwd = pwd.parent
         elsif name == '/'
@@ -55,7 +54,7 @@ def main
         end
       end
     else # ls output
-      size, name = command.split
+      size, name = line.split
       if size == DIR.downcase
         pwd.children << Node.new(DIR, name, pwd)
       else
@@ -63,14 +62,12 @@ def main
       end
     end
   end
-  puts gather_small_dirs(root).sum { |d| d.size }
+  puts gather_small_dirs(root).sum(&:size)
 end
 
 def gather_small_dirs(node)
   small_dirs = []
-  if node.type == DIR && node.size < 100_000
-    small_dirs << node
-  end
+  small_dirs << node if node.type == DIR && node.size < 100_000
   small_dirs.concat(node.children.map { |n| gather_small_dirs(n) }).flatten
 end
 
