@@ -3,7 +3,7 @@ def main
   cycle = 1
   x = 1
   sum_of_interesting_values = 0
-  File.readlines('./input.txt').map(&:strip).each do |instruction|
+  File.foreach('./input.txt').map(&:strip).each do |instruction|
     if instruction == 'noop'
       cycle, sum_of_interesting_values = tick(x, cycle, sum_of_interesting_values)
     else
