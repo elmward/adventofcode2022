@@ -17,11 +17,9 @@ def ordering(a, b)
     a = [a]
   end
 
-  if a.instance_of?(Array) && b.instance_of?(Array)
-    return -1 if a.empty? && !b.empty?
-    return 0 if [a, b].all?(&:empty?)
-    return 1 if b.empty? && !a.empty?
-  end
+  return -1 if a.empty? && !b.empty?
+  return 0 if [a, b].all?(&:empty?)
+  return 1 if b.empty? && !a.empty?
 
   first_a = a.first
   first_b = b.first
