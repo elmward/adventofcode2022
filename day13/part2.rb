@@ -22,9 +22,7 @@ def ordering(a, b)
   return 1 if b.empty? && !a.empty?
 
   ordering = ordering(a.first, b.first)
-  return ordering unless ordering == 0
-
-  ordering(a[1..], b[1..])
+  ordering == 0 ? ordering(a[1..], b[1..]) : ordering
 end
 
 main if __FILE__ == $PROGRAM_NAME
