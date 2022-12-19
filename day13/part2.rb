@@ -21,10 +21,7 @@ def ordering(a, b)
   return 0 if [a, b].all?(&:empty?)
   return 1 if b.empty? && !a.empty?
 
-  first_a = a.first
-  first_b = b.first
-
-  ordering = ordering(first_a, first_b)
+  ordering = ordering(a.first, b.first)
   return ordering unless ordering == 0
 
   ordering(a[1..], b[1..])
